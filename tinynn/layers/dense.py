@@ -19,20 +19,20 @@ class Dense:
         forward_pass_outputs = np.dot(inputs, self.weights) + self.biases
 
         if self.activation == 'relu':
-            self.activation = Relu(inputs=forward_pass_outputs)
+            self.activation_func = Relu(inputs=forward_pass_outputs)
 
         elif self.activation == 'sigmoid':
-            self.activation = Sigmoid(inputs=forward_pass_outputs)
+            self.activation_func = Sigmoid(inputs=forward_pass_outputs)
 
         elif self.activation == 'softmax':
-            self.activation = Softmax(inputs=forward_pass_outputs)
+            self.activation_func = Softmax(inputs=forward_pass_outputs)
 
-        self.outputs = self.activation.outputs
+        self.outputs = self.activation_func.outputs
         return self.outputs
 
     def backward(self, dvalues):
-        self.activation.backward(dvalues)
+        self.activation_func.backward(dvalues)
 
-        self.dweights = np.dot(self.inputs.T, self.activation.dinputs)
-        self.dbiases = np.sum(self.activation.dinputs, axis=0, keepdims=True)
-        self.dinputs = np.dot(self.activation.dinputs, self.weights.T)
+        self.dweights = np.dot(self.inputs.T, self.activation_func.dinputs)
+        self.dbiases = np.sum(self.activation_func.dinputs, axis=0, keepdims=True)
+        self.dinputs = np.dot(self.activation_func.dinputs, self.weights.T)

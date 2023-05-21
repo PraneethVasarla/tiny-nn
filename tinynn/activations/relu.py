@@ -7,5 +7,5 @@ class Relu:
     def __repr__(self):
         return "Relu Activation"
     def backward(self,dvalues):
-        self.dinputs = self.outputs.copy()
-        self.dinputs[dvalues<=0] = 0
+        self.dinputs = dvalues.copy()
+        self.dinputs[self.inputs<=0] = 0
