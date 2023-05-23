@@ -7,8 +7,9 @@ class Softmax:
         # We subtract each input with the sample max to avoid exploding value of exponentiation which may lead to
         # overflow error in case of large numbers
         exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
-        self.outputs = exp_values / np.sum(exp_values, axis=1,
+        probs = exp_values / np.sum(exp_values, axis=1,
                                            keepdims=True)  # These can also be referred to as probabilities
+        self.outputs = probs
 
     def __repr__(self):
         return "Softmax Activation"

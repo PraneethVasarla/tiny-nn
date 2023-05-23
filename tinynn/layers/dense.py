@@ -3,13 +3,15 @@ from tinynn.activations import Relu,Sigmoid,Softmax
 
 
 class Dense:
-    def __init__(self, input_size, n_neurons, layer_num, activation='relu'):
-        self.weights = 0.01 * np.random.rand(input_size, n_neurons)
-        self.biases = np.zeros(n_neurons)
+    def __init__(self, input_size, n_neurons, layer_num = None, activation='relu'):
+        self.weights = 0.01 * np.random.randn(input_size, n_neurons)
+        self.biases = np.zeros((1,n_neurons))
         self.activation = activation
         self.inputs = None
         self.type = "Dense"
         self.layer_num = layer_num
+        self.prev = None
+        self.next = None
 
     def __repr__(self):
         return f"Layer type: {self.type}, activation: {self.activation}, layer_num: {self.layer_num}"
@@ -28,11 +30,9 @@ class Dense:
             self.activation_func = Softmax(inputs=forward_pass_outputs)
 
         self.outputs = self.activation_func.outputs
-        return self.outputs
 
     def backward(self, dvalues):
         self.activation_func.backward(dvalues)
-
         self.dweights = np.dot(self.inputs.T, self.activation_func.dinputs)
         self.dbiases = np.sum(self.activation_func.dinputs, axis=0, keepdims=True)
         self.dinputs = np.dot(self.activation_func.dinputs, self.weights.T)
