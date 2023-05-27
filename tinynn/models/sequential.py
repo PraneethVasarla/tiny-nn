@@ -10,6 +10,7 @@ class Sequential:
 
     def add(self, layer_object):
         self.layers_count += 1
+        layer_object.layer_num = self.layers_count
         if self.layers_count > 1:
             layer_object.prev = self.layers[-1]
             self.layers[-1].next = layer_object
@@ -46,7 +47,7 @@ class Sequential:
         if self.optimizer:
             for epoch in range(epochs):
                 self.forward(X, y)
-                self.backward(self.layers[-2].outputs)
+                self.backward(y)
                 print(f"Epoch: {epoch + 1} | Loss: {self.loss}")
                 self.optimizer.update_parameters()
         else:
