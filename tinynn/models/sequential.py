@@ -37,18 +37,18 @@ class Sequential:
             else:
                 layer.backward(layer.next.dinputs)
 
-    def compile_model(self, optimizer='sgd', loss='categorical_cross_entropy', learning_rate=0.01):
+    def compile_model(self, optimizer='sgd', loss='categorical_cross_entropy', learning_rate=0.01,decay_rate = None):
         if loss == 'categorical_cross_entropy':
             self.add(CategoricalCrossEntropy())
         if optimizer == 'sgd':
-            self.optimizer = StochasticGradientDescent(layers=self.layers, learning_rate=learning_rate)
+            self.optimizer = StochasticGradientDescent(layers=self.layers, learning_rate=learning_rate,decay_rate=decay_rate)
 
     def fit(self, X, y, epochs=10):
         if self.optimizer:
             for epoch in range(epochs):
                 self.forward(X, y)
                 self.backward(y)
-                print(f"Epoch: {epoch + 1} | Loss: {self.loss}")
+                print(f"Epoch: {epoch + 1} | LR: {self.optimizer.current_learning_rate} | Loss: {self.loss}")
                 self.optimizer.update_parameters()
         else:
             raise Exception("Model needs to be compiled first using model.compile_model()")

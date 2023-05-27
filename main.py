@@ -7,10 +7,11 @@ X = np.array([[1,2,3],
      [2,3,4]])
 y = np.array([0, 0, 1])
 
+
 model = Sequential()
 
 model.add(Dense(3,64))
 model.add(Dense(64,2,activation='softmax'))
 
-model.compile_model(learning_rate=0.7)
-model.fit(X,y,epochs=100)
+model.compile_model(learning_rate=1., decay_rate=0.01)
+model.fit(X,y,epochs=10000)
