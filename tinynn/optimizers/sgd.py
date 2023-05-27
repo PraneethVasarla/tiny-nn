@@ -9,12 +9,4 @@ class StochasticGradientDescent:
         for layer in self.layers:
             if layer.type != "Loss":
                 layer.weights += -self.learning_rate * layer.dweights
-                layer.biases += -self.learning_rate * layer.dbiases.reshape(layer.biases.shape)
-                if layer.layer_num == 2:
-                    pass
-                    # print(layer)
-                    # print("Weights:")
-                    # print(layer.weights)
-                    # print("")
-                    # print("Bias")
-                    # print(layer.biases)
+                layer.biases += -self.learning_rate * layer.dbiases

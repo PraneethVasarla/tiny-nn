@@ -10,31 +10,36 @@ class Sequential:
 
     def add(self, layer_object):
         self.layers_count += 1
+        layer_object.layer_num = self.layers_count
+        if self.layers_count > 1:
+            layer_object.prev = self.layers[-1]
+            self.layers[-1].next = layer_object
         self.layers.append(layer_object)
 
     def forward(self, inputs, labels):
-        output = inputs
         for layer in self.layers:
-            if layer.type != "Loss":
-                output = layer.forward(output)
+            if layer.type == "Loss":
+                self.loss = layer.calculate(layer.prev.outputs, labels)
             else:
-                self.loss = layer.calculate(output, labels)
+                if not layer.prev:
+                    layer.forward(inputs)
+                else:
+                    layer.forward(layer.prev.outputs)
+                    if not layer.next:
+                        self.output = layer.outputs
 
-        self.output = output
-        # if layer.type == 'Loss':
-        # print(f"Loss: {self.output}")
 
     def backward(self, y):
         # backpropagation
-        for index, layer in enumerate(self.layers[::-1]):
+        for layer in self.layers[::-1]:
             if layer.type == 'Loss':
-                layer.backward(self.layers[-2].outputs, y)
+                layer.backward(layer.prev.outputs, y)
             else:
-                layer.backward(self.layers[-abs(index)].dinputs)
+                layer.backward(layer.next.dinputs)
 
     def compile_model(self, optimizer='sgd', loss='categorical_cross_entropy', learning_rate=0.01):
         if loss == 'categorical_cross_entropy':
-            self.layers.append(CategoricalCrossEntropy())
+            self.add(CategoricalCrossEntropy())
         if optimizer == 'sgd':
             self.optimizer = StochasticGradientDescent(layers=self.layers, learning_rate=learning_rate)
 
@@ -45,8 +50,5 @@ class Sequential:
                 self.backward(y)
                 print(f"Epoch: {epoch + 1} | Loss: {self.loss}")
                 self.optimizer.update_parameters()
-                # print(self.loss == "nan")
-                if np.isnan(self.loss):
-                    break
         else:
             raise Exception("Model needs to be compiled first using model.compile_model()")
