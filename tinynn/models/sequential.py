@@ -37,11 +37,11 @@ class Sequential:
             else:
                 layer.backward(layer.next.dinputs)
 
-    def compile_model(self, optimizer='sgd', loss='categorical_cross_entropy', learning_rate=0.01,decay_rate = None):
+    def compile_model(self, optimizer='sgd', loss='categorical_cross_entropy', learning_rate=0.01,decay_rate = None,momentum = None):
         if loss == 'categorical_cross_entropy':
             self.add(CategoricalCrossEntropy())
         if optimizer == 'sgd':
-            self.optimizer = StochasticGradientDescent(layers=self.layers, learning_rate=learning_rate,decay_rate=decay_rate)
+            self.optimizer = StochasticGradientDescent(layers=self.layers, learning_rate=learning_rate,decay_rate=decay_rate,momentum=momentum)
 
     def fit(self, X, y, epochs=10):
         if self.optimizer:
