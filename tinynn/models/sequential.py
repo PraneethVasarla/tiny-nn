@@ -1,5 +1,5 @@
 from tinynn import np
-from tinynn.optimizers import StochasticGradientDescent
+from tinynn.optimizers import StochasticGradientDescent,Adagrad
 from tinynn.loss_functions import CategoricalCrossEntropy
 
 class Sequential:
@@ -42,6 +42,8 @@ class Sequential:
             self.add(CategoricalCrossEntropy())
         if optimizer == 'sgd':
             self.optimizer = StochasticGradientDescent(layers=self.layers, learning_rate=learning_rate,decay_rate=decay_rate,momentum=momentum)
+        elif optimizer == 'adagrad':
+            self.optimizer = Adagrad(layers=self.layers,learning_rate=learning_rate,decay_rate=decay_rate)
 
     def fit(self, X, y, epochs=10):
         if self.optimizer:
