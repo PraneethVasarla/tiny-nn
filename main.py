@@ -13,5 +13,5 @@ model = Sequential()
 model.add(Dense(3,64))
 model.add(Dense(64,2,activation='softmax'))
 
-model.compile_model(learning_rate=0.01, optimizer='adagrad') #Also aavailable params: decay_rate,momentum(only for sgd) and optimizer = sgd
+model.compile_model(learning_rate=0.01, optimizer='rmsprop',epsilon=1e-7,rho = 0.9) #Also available params: decay_rate,momentum(only for sgd) and optimizer = sgd
 model.fit(X,y,epochs=1000)
