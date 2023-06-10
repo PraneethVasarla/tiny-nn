@@ -9,6 +9,7 @@ class CategoricalCrossEntropy(Loss):
         self.type = "Loss"
         self.prev = None
         self.next = None
+        self.layer_num = None
 
     def forward(self, preds, labels):
         samples = len(preds)
