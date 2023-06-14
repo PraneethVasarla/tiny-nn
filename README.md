@@ -24,20 +24,21 @@ pip install tinynn
 Here's a basic example demonstrating how to create a feedforward neural network using Tinynn:
 
 ```python
-import tinynn as tn
+from tinynn.models import Sequential
+from tinynn.layers import Dense
 import numpy as np
+
+model = Sequential()
+
 X = np.array([[1,2,3],
      [5,4,3],
      [2,3,4]])
 y = np.array([0, 0, 1])
 
+model.add(Dense(3,64))
+model.add(Dense(64,2,activation='softmax'))
 
-model = tn.models.Sequential()
-
-model.add(tn.layers.Dense(3,64))
-model.add(tn.layers.Dense(64,2,activation='softmax'))
-
-model.compile_model(learning_rate=0.01, optimizer='adam') #Also available params: decay_rate,momentum(only for sgd) and optimizer = sgd,adagrad
+model.compile_model(learning_rate=0.01, optimizer='adagrad') #Also available params: decay_rate,momentum(only for sgd) and optimizer = sgd,adagrad
 model.fit(X,y,epochs=1000)
 ```
 
