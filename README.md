@@ -17,7 +17,7 @@ Despite its simplicity, Tinynn has all the key features of a neural network libr
 To install Tinynn, you can use pip:
 
 ```bash
-pip install tinynn
+pip install tinynn-py
 ```
 
 ## Usage
